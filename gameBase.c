@@ -241,10 +241,10 @@ int instructionPage(int s) {
         printf("\n<<<  Page 2 / 3  >>>");
     } else if (s == 3) {
         printf("\n");
-        printf("\nThat's it idk how");
-        printf("\nto save progress yet");
-        printf("\nthanks.");
+        printf("\nHighscore is saved in");
+        printf("\nscore.txt ");
         printf("\n");
+        printf("\nok thanks goodluck");
         printf("\n");
         printf("\n");
         printf("\n<<<  Page 3 / 3     [z] to Return");
@@ -342,6 +342,7 @@ int gameOptions(int s, float time, int color) {
     printf("\n");
     printf("\n");
     printf("\n");
+    printf("\n");
     printf("\n [z] Enter [x] Cancel");
     
     return 0;
@@ -357,6 +358,10 @@ int main () {
     char maze[201][201];
     int direction[2] = {0, 0};
     clock_t last_tick = clock();
+
+    FILE *f = fopen("score.txt", "a+");
+    fscanf(f, "%d", &highScore);
+    fclose(f);
 
     mainMenu(1);
     while (running) {
@@ -472,6 +477,7 @@ int main () {
                     countdown--;
                     clearScreen();
                     printf("\n%d", countdown);
+                    
                 }
                 if (countdown <= 0) {
                     onCountdown = 0;
@@ -485,6 +491,7 @@ int main () {
                     selection = 1;
                     playing = 0;
                     newHighscore = 0;
+                    mainMenu(1);
                 }
                 if (screenRefreshTimer <= 0) {
                     gameoverScreen(score, highScore, newHighscore, countdown--);
@@ -548,12 +555,16 @@ int main () {
                         score++;
                     }
 
-                    if (timer <= 0) {
+                    if (timer <= 0 || ch == 'q') {
                         gameover++;
                         gameoverTime = 5;
                         gameoverScreen(score, highScore, newHighscore, 5);
                         screenRefreshTimer = 1;
                         countdown = 5;
+                        FILE *f = fopen("score.txt", "w");
+                        fprintf(f, "%d", highScore);
+                        fclose(f);
+                        timer = 0;
                     }
 
 
